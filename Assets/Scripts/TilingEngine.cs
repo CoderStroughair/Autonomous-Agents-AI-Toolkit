@@ -14,7 +14,7 @@ public class TilingEngine : MonoBehaviour {
 	public GameObject TilePrefab;
 	public Vector2 CurrentPosition;
 
-	private TileSprite[,] _map;
+    public TileSprite[,] _map;
     private GameObject controller;
     private GameObject _tileContainer;
 	private List<GameObject> _tiles = new List<GameObject>();
@@ -26,7 +26,7 @@ public class TilingEngine : MonoBehaviour {
         {
             for (var x = 0; x < MapSize.x - 1; x++)
             {
-                _map[x, y] = new TileSprite("unset", eTile.unset, DefaultImage);
+                _map[x, y] = new TileSprite("unset", eTile.Unset, DefaultImage);
             }
         }
     }

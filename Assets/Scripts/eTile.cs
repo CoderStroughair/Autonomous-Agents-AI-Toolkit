@@ -3,14 +3,14 @@ using System.Collections;
 
 public enum eTile {
 
-    unset,
-	plains,
-    mountain,
-    mine,
-    shack, 
-    encampment,
-    cemetary,
-    town,
+    Unset,
+	Plains,
+    Mountain,
+    Mine,
+    Shack, 
+    Encampment,
+    Cemetary,
+    Town,
     NUM_TILES
 
 }

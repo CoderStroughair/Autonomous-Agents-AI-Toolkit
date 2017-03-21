@@ -14,7 +14,7 @@ public class TileSprite
     public TileSprite()
     {
         tilename = "unset";
-        type = eTile.unset;
+        type = eTile.Unset;
         sprite = new Sprite();
 	}
     public TileSprite(string _name, eTile _type, Sprite image)

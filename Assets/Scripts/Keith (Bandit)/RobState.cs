@@ -16,7 +16,7 @@ public sealed class RobState : GlobalState<Keith> {
     public override void Enter(Keith agent)
     {
         agent.location = eLocation.Cemetery;
-        Debug.Log("Keith has arrived at the Bank...");
+        //Debug.Log("Keith has arrived at the Bank...");
     }
 
     public override void Execute(Keith agent)
@@ -27,6 +27,6 @@ public sealed class RobState : GlobalState<Keith> {
 
     public override void Exit(Keith agent)
     {
-        Debug.Log("Keith is leaving the Cemetery");
+        //Debug.Log("Keith is leaving the Cemetery");
     }
 }

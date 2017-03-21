@@ -15,17 +15,17 @@ public sealed class CampState : State<Keith> {
 	
 	public override void Enter (Keith agent) {
         agent.location = eLocation.OutlawCamp;
-        Debug.Log("Keith arrived at the Outlaw Camp...");
+        //Debug.Log("Keith arrived at the Outlaw Camp...");
 	}
 	
 	public override void Execute (Keith agent)
     {
         agent.turnsLurking++;
-        Debug.Log("Keith is lurking in the Outlaw Camp");
-        Debug.Log("Keith has been lurking for " + agent.turnsLurking + " turns.");
+       // Debug.Log("Keith is lurking in the Outlaw Camp");
+       // Debug.Log("Keith has been lurking for " + agent.turnsLurking + " turns.");
         if (agent.totalGold >= 20)
         {
-            Debug.Log("Keith has stored his gold in his hiding place");
+       //     Debug.Log("Keith has stored his gold in his hiding place");
             agent.totalGold = 0;
         }
         if (agent.finishedLurking())
@@ -42,6 +42,6 @@ public sealed class CampState : State<Keith> {
 	
 	public override void Exit (Keith agent)
     {
-        Debug.Log("Keith is leaving the Outlaw Camp");
+       // Debug.Log("Keith is leaving the Outlaw Camp");
 	}
 }

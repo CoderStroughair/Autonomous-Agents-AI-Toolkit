@@ -6,10 +6,9 @@ public class Keith : Agent
     private StateMachine<Keith> stateMachine;
 
     public int totalGold = 0;
-    public eLocation location;
     public int turnsLurking = 0;
     int MAX_TURNS_LURKING = 5;
-    public delegate void BankRobbery();
+    public delegate void BankRobbery(int i);
     public static event BankRobbery OnBankRobbery;
 
     public void Awake()
@@ -24,14 +23,6 @@ public class Keith : Agent
         getPosition();
     }
 
-    override protected Vector2 getPosition()
-    {
-        GameObject[] tileContainer = GameObject.FindGameObjectsWithTag("TileContainer") as GameObject[];
-
-
-
-        return new Vector2();
-    }
 
     public void ChangeState(State<Keith> state)
     {
@@ -61,12 +52,13 @@ public class Keith : Agent
 
     public void RobGold()
     {
-        if (OnBankRobbery != null)
+        if (Bob.totalGold > 10)
         {
             Debug.Log("\"STICK EM UP\" says Keith as he robs the bank blind");
-            totalGold += Random.Range(1, 11);
+            int goldstolen = Random.Range(1, 11);
+            totalGold += goldstolen;
             Debug.Log("Total Gold stolen by Keith is " + totalGold);
-            OnBankRobbery();
+            OnBankRobbery(goldstolen);
         }
         else
             Debug.Log("There was no money in the bank for Keith to steal. He is sad now.");

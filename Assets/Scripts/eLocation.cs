@@ -1,2 +1,2 @@
 ﻿using UnityEngine;
-    public enum eLocation {Bank, Mine, OutlawCamp, SheriffsOffice, Undertakers, Cemetery, BobsHouse};
+    public enum eLocation {Bank, Mine, OutlawCamp, SheriffsOffice, Undertakers, Cemetery, Shack};

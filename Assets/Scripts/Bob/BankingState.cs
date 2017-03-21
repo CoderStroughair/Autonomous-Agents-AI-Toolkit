@@ -14,13 +14,14 @@ public sealed class BankingState : State<Bob> {
 	private BankingState () {}
 
 	public override void Enter (Bob agent) {
-		Debug.Log("Starting to wait...");
+        agent.location = eLocation.Bank;
+		Debug.Log("Bob is entering the Bank...");
 	}
 
 	public override void Execute (Bob agent) {
 		agent.IncreaseWaitedTime(1);
-		Debug.Log("Banking the money - Stored: " + agent.totalGold + " - Total Gold: " + agent.totalGold*agent.waitedTime);
-        agent.totalGold = 0;
+		Debug.Log("Banking the money - Stored: " + Bob.totalGold + " - Total Gold: " + Bob.totalGold*agent.waitedTime);
+        Bob.totalGold = 0;
         if (agent.WaitedLongEnough())
         {
             if (agent.CreatedEnough())

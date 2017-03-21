@@ -20,8 +20,8 @@ public sealed class MineState : State<Bob> {
 	
 	public override void Execute (Bob agent) {
 		agent.CreateTime();
-		Debug.Log("Mining Gold. Total Mined: " + agent.totalGold + " unit" + (agent.totalGold > 1 ? "s" : "") + "...");
-        if (agent.totalGold > 7)
+		Debug.Log("Mining Gold. Total Mined: " + Bob.totalGold + " unit" + (Bob.totalGold > 1 ? "s" : "") + "...");
+        if (Bob.totalGold > 7)
             agent.ChangeState(BankingState.Instance);
 	}
 	

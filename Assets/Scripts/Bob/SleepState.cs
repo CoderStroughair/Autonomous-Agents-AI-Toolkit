@@ -18,7 +18,7 @@ public sealed class SleepState : State<Bob>
 
     public override void Enter(Bob agent)
     {
-        agent.location = eLocation.BobsHouse;
+        agent.location = eLocation.Shack;
         Debug.Log("Bob has headed home to bed.");
     }
 
