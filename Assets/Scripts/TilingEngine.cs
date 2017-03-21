@@ -13,7 +13,6 @@ public class TilingEngine : MonoBehaviour {
 	public GameObject TileContainerPrefab;
 	public GameObject TilePrefab;
 	public Vector2 CurrentPosition;
-	public Vector2 ViewPortSize;
 
 	private TileSprite[,] _map;
     private GameObject controller;
@@ -35,14 +34,42 @@ public class TilingEngine : MonoBehaviour {
 	//set the tiles of the map to what is specified in TileSprites
 	private void SetTiles()
     {
-        var index = 0;
-        for (var y = 0; y < MapSize.y - 1; y++)
+        int numSpecTiles = 5;
+        Vector2[] specialLocations = new Vector2[numSpecTiles];
+        for (int i = 0; i < numSpecTiles; i++)
         {
-            for (var x = 0; x < MapSize.x - 1; x++)
+            specialLocations[i] = new Vector2(UnityEngine.Random.Range(0, (int)MapSize.x-2), UnityEngine.Random.Range(0, (int)MapSize.y-2));
+            for (int j = 0; j < i; j++)
             {
+                if (specialLocations[j] == specialLocations[i])
+                {
+                    specialLocations[i] = new Vector2(UnityEngine.Random.Range(0, (int)MapSize.x-2), UnityEngine.Random.Range(0, (int)MapSize.y-2));
+                    j = 0;
+                }
+            }
+        }
+
+        var index = 0;
+        for (var y = 0; y < MapSize.y; y++)
+        {
+            for (var x = 0; x < MapSize.x; x++)
+            {
+                var random = UnityEngine.Random.Range(0.0f, 1.0f);
+                if (random < 0.8)
+                    index = 1;
+                else
+                    index = 2;
                 _map[x, y] = new TileSprite(TileSprites[index].tilename, TileSprites[index].type, TileSprites[index].sprite);
-                index++;
-                if (index > TileSprites.Count - 1) index = 0;
+
+                Vector2 currLoc = new Vector2(x, y);
+                for (int i = 0; i < numSpecTiles; i++)
+                {
+                    if (currLoc == specialLocations[i])
+                    {
+                        _map[x, y] = new TileSprite(TileSprites[i+3].tilename, TileSprites[i+3].type, TileSprites[i+3].sprite);
+                        break;
+                    }
+                }
             }
         }
     }
@@ -57,28 +84,28 @@ public class TilingEngine : MonoBehaviour {
         LeanPool.Despawn(_tileContainer);
         _tileContainer = LeanPool.Spawn(TileContainerPrefab);
         var tileSize = 1f;
-        var viewOffsetX = ViewPortSize.x / 2f;
-        var viewOffsetY = ViewPortSize.y / 2f;
-        for (var y = -viewOffsetY; y < viewOffsetY; y++)
+        var viewOffsetX = MapSize.x / 2f;
+        var viewOffsetY = MapSize.y / 2f;
+        for (var y = 0; y < MapSize.y; y++)
         {
-            for (var x = -viewOffsetX; x < viewOffsetX; x++)
+            for (var x = 0; x < MapSize.x; x++)
             {
-                var tX = x * tileSize;
-                var tY = y * tileSize;
+                var tX = (x - viewOffsetX + 0.5f) * tileSize;
+                var tY = (y - viewOffsetY + 0.5f) * tileSize;
 
                 var iX = x + CurrentPosition.x;
                 var iY = y + CurrentPosition.y;
 
                 if (iX < 0) continue;
                 if (iY < 0) continue;
-                if (iX > MapSize.x - 2) continue;
-                if (iY > MapSize.y - 2) continue;
+                if (y > MapSize.x) continue;
+                if (y > MapSize.y) continue;
 
                 var t = LeanPool.Spawn(TilePrefab);
                 t.transform.position = new Vector3(tX, tY, 0);
                 t.transform.SetParent(_tileContainer.transform);
                 var renderer = t.GetComponent<SpriteRenderer>();
-                renderer.sprite = _map[(int)x + (int)CurrentPosition.x, (int)y + (int)CurrentPosition.y].sprite;
+                renderer.sprite = _map[(int)x, (int)y].sprite;
                 _tiles.Add(t);
             }
         }
@@ -97,7 +124,7 @@ public class TilingEngine : MonoBehaviour {
 
     private void Update()
     {
-        //AddTilesToMap();
+        AddTilesToMap();
     }
 
 }

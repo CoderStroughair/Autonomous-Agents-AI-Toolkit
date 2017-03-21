@@ -21,6 +21,16 @@ public class Keith : Agent
     public override void Update()
     {
         this.stateMachine.Update();
+        getPosition();
+    }
+
+    override protected Vector2 getPosition()
+    {
+        GameObject[] tileContainer = GameObject.FindGameObjectsWithTag("TileContainer") as GameObject[];
+
+
+
+        return new Vector2();
     }
 
     public void ChangeState(State<Keith> state)
