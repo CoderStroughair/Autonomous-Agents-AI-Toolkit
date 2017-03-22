@@ -19,16 +19,14 @@ public sealed class BankingState : State<Bob> {
 	}
 
 	public override void Execute (Bob agent) {
-		agent.IncreaseWaitedTime(1);
-		Debug.Log("Banking the money - Stored: " + Bob.totalGold + " - Total Gold: " + Bob.totalGold*agent.waitedTime);
+		agent.IncreaseBankedCash(Bob.totalGold);
+		Debug.Log("Banking the money - Stored: " + Bob.totalGold + " - Total Gold: " + Bob.bankedCash);
         Bob.totalGold = 0;
-        if (agent.WaitedLongEnough())
-        {
-            if (agent.CreatedEnough())
-                agent.ChangeState(SleepState.Instance);
-            else
-                agent.ChangeState(MineState.Instance);
-        }
+
+        if (agent.StoredEnough())
+            agent.ChangeState(SleepState.Instance);
+        else
+            agent.ChangeState(MineState.Instance);
 	}
 
 	public override void Exit (Bob agent) {

@@ -4,8 +4,9 @@ using System.Collections;
 abstract public class Agent : MonoBehaviour {
 
     public eLocation location;
+    protected bool isMoving;
 
-    abstract public void Update ();
+    abstract public void FixedUpdate();
 
     protected Vector2 getPosition()
     {
@@ -38,11 +39,31 @@ abstract public class Agent : MonoBehaviour {
             for (int j = 0; j < map.GetLength(1); j++)
             {
                 if (map[i, j].type == mapLoc)
-                    return new Vector2(i - cameraPosition.x, j - cameraPosition.y);
+                {
+                    Vector2 MapSize = controller.MapSize;
+                    var viewOffsetX = MapSize.x / 2f;
+                    var viewOffsetY = MapSize.y / 2f;
+                    var tX = (i - viewOffsetX + 0.5f) * 1f;
+                    var tY = (j - viewOffsetY + 0.5f) * 1f;
+                    return new Vector2(tX, tY);
+                }
             }
         }
 
 
         return new Vector2(-1, -1);
+    }
+
+    protected IEnumerator moveAgent(Vector3 newPos)
+    {
+        location = eLocation.Moving;
+        while (transform.position != newPos)
+        {
+            yield return null;
+            if (transform.position.x != newPos.x)
+            {
+
+            }
+        }
     }
 }

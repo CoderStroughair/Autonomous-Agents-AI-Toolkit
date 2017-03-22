@@ -2,7 +2,7 @@
 
 public sealed class SleepState : State<Bob>
 {
-
+    int timeslept = 0;
     static readonly SleepState instance = new SleepState();
 
     public static SleepState Instance
@@ -26,7 +26,9 @@ public sealed class SleepState : State<Bob>
     {
         agent.Sleep();
         Debug.Log("...Bob is sleeping. Good night Bob.");
-        agent.ChangeState(MineState.Instance);
+        timeslept++;
+        if (timeslept > 4)
+            agent.ChangeState(MineState.Instance);
     }
 
     public override void Exit(Bob agent)

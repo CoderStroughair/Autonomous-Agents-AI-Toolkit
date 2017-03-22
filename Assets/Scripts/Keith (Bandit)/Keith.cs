@@ -17,10 +17,15 @@ public class Keith : Agent
         this.stateMachine.Init(this, CampState.Instance);
     }
 
-    public override void Update()
+    public override void FixedUpdate()
     {
+        TilingEngine controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<TilingEngine>();
+        if (!controller.characterMovement)
+            return;
+
         this.stateMachine.Update();
-        getPosition();
+        Vector2 mapLoc = getPosition();
+        this.transform.position = new Vector3(mapLoc.x, mapLoc.y, 0);
     }
 
 
@@ -52,7 +57,7 @@ public class Keith : Agent
 
     public void RobGold()
     {
-        if (Bob.totalGold > 10)
+        if (Bob.bankedCash > 10)
         {
             Debug.Log("\"STICK EM UP\" says Keith as he robs the bank blind");
             int goldstolen = Random.Range(1, 11);

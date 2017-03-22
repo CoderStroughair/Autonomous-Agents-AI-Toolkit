@@ -4,8 +4,8 @@ public class Bob : Agent {
 
 	private StateMachine<Bob> stateMachine;
 
-	public static int WAIT_TIME = 5;
-	public int waitedTime = 0;
+	public static int WAIT_TIME = 20;
+	public static int bankedCash = 0;
 	public static int totalGold = 0;
 
 	public void Awake ()
@@ -15,19 +15,19 @@ public class Bob : Agent {
         Keith.OnBankRobbery += RespondToBankRobbery;
     }
 
-	public void IncreaseWaitedTime (int amount)
+	public void IncreaseBankedCash (int amount)
     {
-		this.waitedTime += amount;
+        Bob.bankedCash += amount;
 	}
 
 	public bool WaitedLongEnough ()
     {
-		return this.waitedTime >= WAIT_TIME;
+		return Bob.bankedCash >= WAIT_TIME;
 	}
 
-    public bool CreatedEnough ()
+    public bool StoredEnough ()
     {
-        return Bob.totalGold >= WAIT_TIME;
+        return Bob.bankedCash >= WAIT_TIME;
     }
 
 	public void CreateTime ()
@@ -40,23 +40,26 @@ public class Bob : Agent {
 		this.stateMachine.ChangeState(state);
 	}
 
-	override public void Update ()
+	override public void FixedUpdate()
     {
-		this.stateMachine.Update();
+        TilingEngine controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<TilingEngine>();
+        if (!controller.characterMovement)
+            return;
+
+        this.stateMachine.Update();
         Vector2 mapLoc = getPosition();
-        Debug.Log(location + " is in square " + mapLoc);
         this.transform.position = new Vector3(mapLoc.x, mapLoc.y, 0);
 	}
 
     public void Sleep()
     {
         Bob.totalGold = 0;
-        this.waitedTime = 0;
+        Bob.bankedCash = 0;
     }
 
     public void RespondToBankRobbery(int goldLost)
     {
         Debug.Log("Bob is upset because he lost some savings");
-        totalGold -= goldLost;
+        bankedCash -= goldLost;
     }
 }

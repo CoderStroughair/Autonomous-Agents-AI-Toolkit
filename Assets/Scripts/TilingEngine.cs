@@ -18,6 +18,9 @@ public class TilingEngine : MonoBehaviour {
     private GameObject controller;
     private GameObject _tileContainer;
 	private List<GameObject> _tiles = new List<GameObject>();
+    public bool characterMovement = true;
+    private int framesPassed = 0;
+    private bool first = true;
 
 	//create a map of size MapSize of unset tiles
 	private void DefaultTiles()
@@ -70,6 +73,7 @@ public class TilingEngine : MonoBehaviour {
                         break;
                     }
                 }
+               
             }
         }
     }
@@ -86,9 +90,9 @@ public class TilingEngine : MonoBehaviour {
         var tileSize = 1f;
         var viewOffsetX = MapSize.x / 2f;
         var viewOffsetY = MapSize.y / 2f;
-        for (var y = 0; y < MapSize.y; y++)
+        for (int y = 0; y < MapSize.y; y++)
         {
-            for (var x = 0; x < MapSize.x; x++)
+            for (int x = 0; x < MapSize.x; x++)
             {
                 var tX = (x - viewOffsetX + 0.5f) * tileSize;
                 var tY = (y - viewOffsetY + 0.5f) * tileSize;
@@ -106,9 +110,21 @@ public class TilingEngine : MonoBehaviour {
                 t.transform.SetParent(_tileContainer.transform);
                 var renderer = t.GetComponent<SpriteRenderer>();
                 renderer.sprite = _map[(int)x, (int)y].sprite;
+                if (_map[(int)x, (int)y].shaded)
+                {
+                    renderer.color = Color.gray;
+                    if (first)
+                    {
+                        Debug.Log("hi");
+                    }
+                }
+                else
+                    renderer.color = Color.white;
+
                 _tiles.Add(t);
             }
         }
+        first = false;
     }
 
     public void Start()
@@ -124,6 +140,14 @@ public class TilingEngine : MonoBehaviour {
 
     private void Update()
     {
+        if (framesPassed == 0)
+            characterMovement = true;
+        else
+            characterMovement = false;
+        framesPassed ++;
+        if (framesPassed > 50)
+            framesPassed = 0;
+
         AddTilesToMap();
     }
 
