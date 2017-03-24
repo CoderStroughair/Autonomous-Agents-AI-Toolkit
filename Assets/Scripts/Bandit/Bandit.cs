@@ -1,26 +1,29 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class Keith : Agent
+public class Bandit : Agent
 {
-    private StateMachine<Keith> stateMachine;
+    private StateMachine<Bandit> stateMachine;
 
     public int totalGold = 0;
     public int turnsLurking = 0;
+    private bool dead = false;
     int MAX_TURNS_LURKING = 5;
     public delegate void BankRobbery(int i);
-    public static event BankRobbery OnBankRobbery;
+    public static event BankRobbery OnBankBalanceChange;
+
 
     public void Awake()
     {
-        this.stateMachine = new StateMachine<Keith>();
+        this.stateMachine = new StateMachine<Bandit>();
         this.stateMachine.Init(this, CampState.Instance);
+        Sheriff.OnArrival += RespondToArrival;
     }
 
     public override void FixedUpdate()
     {
         TilingEngine controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<TilingEngine>();
-        if (!controller.characterMovement)
+        if (!controller.characterMovement||dead)
             return;
 
         this.stateMachine.Update();
@@ -29,7 +32,7 @@ public class Keith : Agent
     }
 
 
-    public void ChangeState(State<Keith> state)
+    public void ChangeState(State<Bandit> state)
     {
         this.stateMachine.ChangeState(state);
     }
@@ -45,7 +48,7 @@ public class Keith : Agent
         return (turnsLurking >= MAX_TURNS_LURKING);
     }
 
-    public void EnterGlobalState(GlobalState<Keith> state)
+    public void EnterGlobalState(GlobalState<Bandit> state)
     {
         this.stateMachine.EnterGlobalState(state);
     }
@@ -57,15 +60,40 @@ public class Keith : Agent
 
     public void RobGold()
     {
-        if (Bob.bankedCash > 10)
+        if (Miner.bankedCash > 10)
         {
             Debug.Log("\"STICK EM UP\" says Keith as he robs the bank blind");
             int goldstolen = Random.Range(1, 11);
             totalGold += goldstolen;
             Debug.Log("Total Gold stolen by Keith is " + totalGold);
-            OnBankRobbery(goldstolen);
+            OnBankBalanceChange(goldstolen);
         }
         else
             Debug.Log("There was no money in the bank for Keith to steal. He is sad now.");
+    }
+
+    public void RespondToArrival(eLocation sheriffLocation)
+    {
+        if (this.location == sheriffLocation || !dead)
+        {
+            Debug.Log("The Sheriff has found the Bandit!");
+            float survive = Random.Range(0.0f, 1.0f);
+            if (survive > 0.6f)
+            {
+                Debug.Log("The Bandit escaped capture this time!");
+            }
+            else
+            {
+                Debug.Log("The Bandit was killed!");
+                this.dead = true;
+                this.transform.Rotate(new Vector3(0.0f, 0.0f, 1.0f), 90.0f);
+                this.GetComponent<SpriteRenderer>().color = Color.gray;
+                if (totalGold > 0)
+                {
+                    Debug.Log("The Sheriff managed to recover some of the stolen gold!");
+                    OnBankBalanceChange(-totalGold);
+                }
+            }
+        }
     }
 }

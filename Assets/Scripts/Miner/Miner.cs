@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public class Bob : Agent {
+public class Miner : Agent {
 
-	private StateMachine<Bob> stateMachine;
+	private StateMachine<Miner> stateMachine;
 
 	public static int WAIT_TIME = 20;
 	public static int bankedCash = 0;
@@ -10,32 +10,32 @@ public class Bob : Agent {
 
 	public void Awake ()
     {
-		this.stateMachine = new StateMachine<Bob>();
+		this.stateMachine = new StateMachine<Miner>();
 		this.stateMachine.Init(this, SleepState.Instance);
-        Keith.OnBankRobbery += RespondToBankRobbery;
+        Bandit.OnBankBalanceChange += RespondToBankBalanceChange;
     }
 
 	public void IncreaseBankedCash (int amount)
     {
-        Bob.bankedCash += amount;
+        Miner.bankedCash += amount;
 	}
 
 	public bool WaitedLongEnough ()
     {
-		return Bob.bankedCash >= WAIT_TIME;
+		return Miner.bankedCash >= WAIT_TIME;
 	}
 
     public bool StoredEnough ()
     {
-        return Bob.bankedCash >= WAIT_TIME;
+        return Miner.bankedCash >= WAIT_TIME;
     }
 
 	public void CreateTime ()
     {
-        Bob.totalGold++;
+        Miner.totalGold++;
 	}
 
-	public void ChangeState (State<Bob> state)
+	public void ChangeState (State<Miner> state)
     {
 		this.stateMachine.ChangeState(state);
 	}
@@ -53,13 +53,21 @@ public class Bob : Agent {
 
     public void Sleep()
     {
-        Bob.totalGold = 0;
-        Bob.bankedCash = 0;
+        Miner.totalGold = 0;
+        Miner.bankedCash = 0;
     }
 
-    public void RespondToBankRobbery(int goldLost)
+    public void RespondToBankBalanceChange(int goldLost)
     {
-        Debug.Log("Bob is upset because he lost some savings");
-        bankedCash -= goldLost;
+        if (goldLost >= 0)
+        {
+            Debug.Log("Bob is upset because he lost some savings");
+            bankedCash -= goldLost;
+        }
+        else
+        {
+            Debug.Log("Bob is thrilled to get his money back");
+            bankedCash -= goldLost;
+        }
     }
 }

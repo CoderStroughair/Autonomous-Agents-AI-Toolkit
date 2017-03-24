@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.5.0f3</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -52,9 +54,6 @@
     <Reference Include="UnityEngine">
       <HintPath>Library\UnityAssemblies\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Advertisements">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Advertisements.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
@@ -70,9 +69,6 @@
     <Reference Include="UnityEngine.HoloLens">
       <HintPath>Library\UnityAssemblies\UnityEngine.HoloLens.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Purchasing">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Purchasing.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.VR">
       <HintPath>Library\UnityAssemblies\UnityEngine.VR.dll</HintPath>
     </Reference>
@@ -82,15 +78,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Agent.cs" />
-    <Compile Include="Assets\Scripts\Bob\BankingState.cs" />
-    <Compile Include="Assets\Scripts\Bob\Bob.cs" />
-    <Compile Include="Assets\Scripts\Bob\MineState.cs" />
-    <Compile Include="Assets\Scripts\Bob\SleepState.cs" />
+    <Compile Include="Assets\Scripts\Bandit\Bandit.cs" />
+    <Compile Include="Assets\Scripts\Bandit\CampState.cs" />
+    <Compile Include="Assets\Scripts\Bandit\CemeteryState.cs" />
+    <Compile Include="Assets\Scripts\Bandit\RobState.cs" />
     <Compile Include="Assets\Scripts\GlobalState.cs" />
-    <Compile Include="Assets\Scripts\Keith (Bandit)\CampState.cs" />
-    <Compile Include="Assets\Scripts\Keith (Bandit)\CemeteryState.cs" />
-    <Compile Include="Assets\Scripts\Keith (Bandit)\Keith.cs" />
-    <Compile Include="Assets\Scripts\Keith (Bandit)\RobState.cs" />
     <Compile Include="Assets\Scripts\LeanPool\Examples\SimpleDelayedPooling.cs" />
     <Compile Include="Assets\Scripts\LeanPool\Examples\SimplePoolBenchmark.cs" />
     <Compile Include="Assets\Scripts\LeanPool\Examples\SimplePooling.cs" />
@@ -98,6 +90,12 @@
     <Compile Include="Assets\Scripts\LeanPool\Scripts\LeanPool.cs" />
     <Compile Include="Assets\Scripts\LeanPool\Scripts\LeanPooledRigidbody.cs" />
     <Compile Include="Assets\Scripts\LeanPool\Scripts\LeanPooledRigidbody2D.cs" />
+    <Compile Include="Assets\Scripts\Miner\BankingState.cs" />
+    <Compile Include="Assets\Scripts\Miner\MineState.cs" />
+    <Compile Include="Assets\Scripts\Miner\Miner.cs" />
+    <Compile Include="Assets\Scripts\Miner\SleepState.cs" />
+    <Compile Include="Assets\Scripts\Sheriff\PatrolState.cs" />
+    <Compile Include="Assets\Scripts\Sheriff\Sheriff.cs" />
     <Compile Include="Assets\Scripts\State.cs" />
     <Compile Include="Assets\Scripts\StateMachine.cs" />
     <Compile Include="Assets\Scripts\TileSprite.cs" />
@@ -105,5 +103,6 @@
     <Compile Include="Assets\Scripts\eLocation.cs" />
     <Compile Include="Assets\Scripts\eTile.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

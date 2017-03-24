@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public sealed class CampState : State<Keith> {
+public sealed class CampState : State<Bandit> {
 	
 	static readonly CampState instance = new CampState();
 	
@@ -13,12 +13,12 @@ public sealed class CampState : State<Keith> {
 	static CampState() {}
 	private CampState() {}
 	
-	public override void Enter (Keith agent) {
+	public override void Enter (Bandit agent) {
         agent.location = eLocation.OutlawCamp;
-        //Debug.Log("Keith arrived at the Outlaw Camp...");
+        Debug.Log("Keith arrived at the Outlaw Camp...");
 	}
 	
-	public override void Execute (Keith agent)
+	public override void Execute (Bandit agent)
     {
         agent.turnsLurking++;
        // Debug.Log("Keith is lurking in the Outlaw Camp");
@@ -40,7 +40,7 @@ public sealed class CampState : State<Keith> {
 
 	}
 	
-	public override void Exit (Keith agent)
+	public override void Exit (Bandit agent)
     {
        // Debug.Log("Keith is leaving the Outlaw Camp");
 	}

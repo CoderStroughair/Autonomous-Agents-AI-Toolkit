@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public sealed class CemeteryState : State<Keith> {
+public sealed class CemeteryState : State<Bandit> {
 	
 	static readonly CemeteryState instance = new CemeteryState();
 	
@@ -13,13 +13,13 @@ public sealed class CemeteryState : State<Keith> {
 	static CemeteryState() {}
 	private CemeteryState() {}
 
-    public override void Enter(Keith agent)
+    public override void Enter(Bandit agent)
     {
         agent.location = eLocation.Cemetery;
-        //Debug.Log("Keith has arrived at the Cemetery...");
+        Debug.Log("Keith has arrived at the Cemetery...");
     }
 
-    public override void Execute(Keith agent)
+    public override void Execute(Bandit agent)
     {
         agent.turnsLurking++;
         //Debug.Log("Keith is lurking in the Cemetery Camp");
@@ -36,7 +36,7 @@ public sealed class CemeteryState : State<Keith> {
 
     }
 
-    public override void Exit(Keith agent)
+    public override void Exit(Bandit agent)
     {
        // Debug.Log("Keith is leaving the Cemetery");
     }

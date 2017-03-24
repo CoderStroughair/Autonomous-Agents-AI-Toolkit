@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public sealed class BankingState : State<Bob> {
+public sealed class BankingState : State<Miner> {
 
 	static readonly BankingState instance = new BankingState();
 
@@ -13,15 +13,15 @@ public sealed class BankingState : State<Bob> {
 	static BankingState () {}
 	private BankingState () {}
 
-	public override void Enter (Bob agent) {
+	public override void Enter (Miner agent) {
         agent.location = eLocation.Bank;
 		Debug.Log("Bob is entering the Bank...");
 	}
 
-	public override void Execute (Bob agent) {
-		agent.IncreaseBankedCash(Bob.totalGold);
-		Debug.Log("Banking the money - Stored: " + Bob.totalGold + " - Total Gold: " + Bob.bankedCash);
-        Bob.totalGold = 0;
+	public override void Execute (Miner agent) {
+		agent.IncreaseBankedCash(Miner.totalGold);
+		Debug.Log("Banking the money - Stored: " + Miner.totalGold + " - Total Gold: " + Miner.bankedCash);
+        Miner.totalGold = 0;
 
         if (agent.StoredEnough())
             agent.ChangeState(SleepState.Instance);
@@ -29,7 +29,7 @@ public sealed class BankingState : State<Bob> {
             agent.ChangeState(MineState.Instance);
 	}
 
-	public override void Exit (Bob agent) {
+	public override void Exit (Miner agent) {
 		Debug.Log("That's enough work for one day!");
 	}
 }

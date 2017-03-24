@@ -56,7 +56,7 @@ abstract public class Agent : MonoBehaviour {
 
     protected IEnumerator moveAgent(Vector3 newPos)
     {
-        location = eLocation.Moving;
+        //location = eLocation.Moving;
         while (transform.position != newPos)
         {
             yield return null;

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public sealed class RobState : GlobalState<Keith> {
+public sealed class RobState : GlobalState<Bandit> {
 	
 	static readonly RobState instance = new RobState();
 	
@@ -13,19 +13,19 @@ public sealed class RobState : GlobalState<Keith> {
 	static RobState() {}
 	private RobState() {}
 
-    public override void Enter(Keith agent)
+    public override void Enter(Bandit agent)
     {
-        agent.location = eLocation.Cemetery;
-        //Debug.Log("Keith has arrived at the Bank...");
+        agent.location = eLocation.Bank;
+        Debug.Log("Keith has arrived at the Bank...");
     }
 
-    public override void Execute(Keith agent)
+    public override void Execute(Bandit agent)
     {
         agent.RobGold();
         agent.LeaveGlobalState();
     }
 
-    public override void Exit(Keith agent)
+    public override void Exit(Bandit agent)
     {
         //Debug.Log("Keith is leaving the Cemetery");
     }
