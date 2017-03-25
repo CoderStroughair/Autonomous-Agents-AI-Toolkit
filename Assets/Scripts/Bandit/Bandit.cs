@@ -7,22 +7,25 @@ public class Bandit : Agent
 
     public int totalGold = 0;
     public int turnsLurking = 0;
-    private bool dead = false;
     int MAX_TURNS_LURKING = 5;
     public delegate void BankRobbery(int i);
     public static event BankRobbery OnBankBalanceChange;
+
+    public delegate void BanditDeath(eLocation location);
+    public static event BanditDeath OnBanditDeath;
 
 
     public void Awake()
     {
         this.stateMachine = new StateMachine<Bandit>();
         this.stateMachine.Init(this, CampState.Instance);
+        this.location = eLocation.OutlawCamp;
         Sheriff.OnArrival += RespondToArrival;
     }
 
     public override void FixedUpdate()
     {
-        TilingEngine controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<TilingEngine>();
+        GameController controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         if (!controller.characterMovement||dead)
             return;
 
@@ -66,7 +69,8 @@ public class Bandit : Agent
             int goldstolen = Random.Range(1, 11);
             totalGold += goldstolen;
             Debug.Log("Total Gold stolen by Keith is " + totalGold);
-            OnBankBalanceChange(goldstolen);
+            if (OnBankBalanceChange != null)
+                OnBankBalanceChange(goldstolen);
         }
         else
             Debug.Log("There was no money in the bank for Keith to steal. He is sad now.");
@@ -74,7 +78,11 @@ public class Bandit : Agent
 
     public void RespondToArrival(eLocation sheriffLocation)
     {
-        if (this.location == sheriffLocation || !dead)
+        eLocation adjustedLocation = sheriffLocation;
+        //Adjust code so that the Sheriff knows if the Bandit is in town, from any building.
+        if (adjustedLocation == eLocation.SheriffsOffice || adjustedLocation == eLocation.Undertakers)
+            adjustedLocation = eLocation.Bank;
+        if (this.location == adjustedLocation && !dead)
         {
             Debug.Log("The Sheriff has found the Bandit!");
             float survive = Random.Range(0.0f, 1.0f);
@@ -93,6 +101,8 @@ public class Bandit : Agent
                     Debug.Log("The Sheriff managed to recover some of the stolen gold!");
                     OnBankBalanceChange(-totalGold);
                 }
+                if(OnBanditDeath != null)
+                    OnBanditDeath(location);
             }
         }
     }

@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autonomous-Agents-Lab-1", "Autonomous-Agents-Lab-1.csproj", "{14894530-FF74-6828-8AA7-3F28255CA9D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autonomous-Agents-Lab-1.Editor", "Autonomous-Agents-Lab-1.Editor.csproj", "{CFBDB856-ADD0-DEAB-4FBA-B0AF34C2E894}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{14894530-FF74-6828-8AA7-3F28255CA9D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14894530-FF74-6828-8AA7-3F28255CA9D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14894530-FF74-6828-8AA7-3F28255CA9D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14894530-FF74-6828-8AA7-3F28255CA9D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFBDB856-ADD0-DEAB-4FBA-B0AF34C2E894}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFBDB856-ADD0-DEAB-4FBA-B0AF34C2E894}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFBDB856-ADD0-DEAB-4FBA-B0AF34C2E894}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFBDB856-ADD0-DEAB-4FBA-B0AF34C2E894}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

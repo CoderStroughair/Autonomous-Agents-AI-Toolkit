@@ -42,7 +42,7 @@ public class Miner : Agent {
 
 	override public void FixedUpdate()
     {
-        TilingEngine controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<TilingEngine>();
+        GameController controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         if (!controller.characterMovement)
             return;
 

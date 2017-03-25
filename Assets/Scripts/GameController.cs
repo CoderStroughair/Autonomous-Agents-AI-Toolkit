@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using Lean; //from Unity asset "LeanPool" - freely available in the Asset Store; used here for object pooling
 
-public class TilingEngine : MonoBehaviour {
+public class GameController : MonoBehaviour {
 
 	public List<TileSprite> TileSprites;
 	public Vector2 MapSize;
@@ -17,6 +17,7 @@ public class TilingEngine : MonoBehaviour {
     public TileSprite[,] _map;
     private GameObject controller;
     private GameObject _tileContainer;
+    public Solver pathfinder;
 	private List<GameObject> _tiles = new List<GameObject>();
     public bool characterMovement = true;
     private int framesPassed = 0;
@@ -131,10 +132,10 @@ public class TilingEngine : MonoBehaviour {
     {
         controller = GameObject.Find("Controller");
         _map = new TileSprite[(int)MapSize.x, (int)MapSize.y];
-
         DefaultTiles();
         SetTiles();
         AddTilesToMap();
+        pathfinder = new Solver(_map);
     }
 
 
