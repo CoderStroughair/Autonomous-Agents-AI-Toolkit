@@ -13,6 +13,7 @@ public class Miner : Agent {
 		this.stateMachine = new StateMachine<Miner>();
 		this.stateMachine.Init(this, SleepState.Instance);
         Bandit.OnBankBalanceChange += RespondToBankBalanceChange;
+        controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
     }
 
 	public void IncreaseBankedCash (int amount)
@@ -38,17 +39,14 @@ public class Miner : Agent {
 	public void ChangeState (State<Miner> state)
     {
 		this.stateMachine.ChangeState(state);
-	}
+    }
 
 	override public void FixedUpdate()
     {
-        GameController controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        if (!controller.characterMovement)
+        if (!doMovement())
             return;
 
         this.stateMachine.Update();
-        Vector2 mapLoc = getPosition();
-        this.transform.position = new Vector3(mapLoc.x, mapLoc.y, 0);
 	}
 
     public void Sleep()

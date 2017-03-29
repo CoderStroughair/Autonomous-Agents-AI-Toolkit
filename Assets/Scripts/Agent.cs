@@ -1,16 +1,57 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 abstract public class Agent : MonoBehaviour {
 
     public eLocation location;
-    protected bool isMoving;
+    public eLocation destination = eLocation.UNSET;
+    public bool isMoving;
     public bool dead = false;
     protected GameController controller;
+    public Stack<Node> path = new Stack<Node>();
+    private bool first = true;
 
     abstract public void FixedUpdate();
 
-    protected Vector2 getPosition()
+    public bool doMovement()    //will return true only if the character reaches their destination, or isn't moving
+    {
+        if (first)
+        {
+            first = false;
+            transform.position = GetGlobalPosition();
+            destination = location;
+            return true;
+        }
+        if (dead || !controller.characterMovement)
+            return false;
+        if (location == destination)
+            return true;
+
+        if (path.Count == 0)
+        {
+            path = controller.pathfinder.solve(GetGridPosition(location), GetGridPosition(destination));
+        }
+        if (path.Count == 0)
+            Debug.Log("Crashing...");
+
+        Node nextSquare = path.Pop();
+        Vector2 MapSize = controller.MapSize;
+        var viewOffsetX = MapSize.x / 2f;
+        var viewOffsetY = MapSize.y / 2f;
+        var tX = (nextSquare.location.x - viewOffsetX + 0.5f) * 1f;
+        var tY = (nextSquare.location.y - viewOffsetY + 0.5f) * 1f;
+        transform.position = new Vector2(tX, tY);
+        if(path.Count == 0)
+        {
+            location = destination;
+            isMoving = false;
+            return true;
+        }
+        return false;
+    }
+
+    protected Vector2 GetGlobalPosition()
     {
         Vector3 cameraPosition = Camera.main.transform.position;
         GameController controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
@@ -54,11 +95,11 @@ abstract public class Agent : MonoBehaviour {
         return new Vector2(-1, -1);
     }
 
-    protected Vector2 GetMapPosition()
+    protected Vector2 GetGridPosition(eLocation currPos)
     {
         TileSprite[,] map = controller._map;
         eTile mapLoc = eTile.NUM_TILES;
-        switch (location)
+        switch (currPos)
         {
             case eLocation.Bank:
             case eLocation.SheriffsOffice:
@@ -91,18 +132,5 @@ abstract public class Agent : MonoBehaviour {
         }
 
         return new Vector2(-1, -1);
-    }
-
-    protected IEnumerator moveAgent(Vector3 newPos)
-    {
-        //location = eLocation.Moving;
-        while (transform.position != newPos)
-        {
-            yield return null;
-            if (transform.position.x != newPos.x)
-            {
-
-            }
-        }
     }
 }

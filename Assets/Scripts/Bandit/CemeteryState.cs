@@ -15,7 +15,9 @@ public sealed class CemeteryState : State<Bandit> {
 
     public override void Enter(Bandit agent)
     {
-        agent.location = eLocation.Cemetery;
+        if (agent.destination == eLocation.UNSET)
+            agent.location = eLocation.Cemetery;
+        agent.destination = eLocation.Cemetery;
         Debug.Log("Keith has arrived at the Cemetery...");
     }
 

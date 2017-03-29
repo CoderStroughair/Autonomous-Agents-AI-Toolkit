@@ -8,54 +8,44 @@ public class Solver
     private Node[,] map;
     private TileSprite[,] tileMap;
     private Node end;
-    static Solver(){}
-    private Solver() { }
 
     public Solver(TileSprite[,] tileMap)
     {
         this.tileMap = tileMap;
         int width = tileMap.GetLength(0);
         int height = tileMap.GetLength(1);
-        Debug.Log(width + "," + height);
-        this.map = new Node[width, height];
-
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < height; y++)
-            {
-                this.map[x, y] = new Node(new Vector2(x, y), tileMap[x, y].type);
-            }
-        }
+        //Debug.Log(width + "," + height);
     }
 
-    public Queue<Node> solve(Vector2 startLocation, Vector2 endLocation)
+    public Stack<Node> solve(Vector2 startLocation, Vector2 endLocation)
     {
-        end = new Node(endLocation, eTile.Unset);
+        //Debug.Log(startLocation + " to " + endLocation);
+        end = new Node(endLocation, eTile.Unset, endLocation);
         int width = tileMap.GetLength(0);
         int height = tileMap.GetLength(1);
-
+        this.map = new Node[width, height];
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                this.map[x, y].resetNode(endLocation);
+                this.map[x, y] = new Node(new Vector2(x, y), tileMap[x, y].type, endLocation);
             }
         }
 
-        Queue<Node> queue = new Queue<Node>();
+        Stack<Node> queue = new Stack<Node>();
 
         bool completed = search(map[(int)startLocation.x, (int)startLocation.y]);
 
         if (completed)
         {
-            Node curr = map[(int)endLocation.x, (int)endLocation.y];
+            Node curr = end;
             while (curr.parent != null)
             {
-                Debug.Log(curr.location.x + "," + curr.location.y);
-                queue.Enqueue(curr);
+                //Debug.Log(curr.location.x + "," + curr.location.y);
+                queue.Push(curr);
                 curr = curr.parent;
             }
-            queue.Reverse();
+            
         }
 
         return queue;
@@ -72,7 +62,7 @@ public class Solver
             // Check whether the end node has been reached
             if (adjacentNode.location == this.end.location)
             {
-                Debug.Log("Finished Pathing");
+               // Debug.Log("Finished Pathing");
                 end = adjacentNode;
                 return true;
             }

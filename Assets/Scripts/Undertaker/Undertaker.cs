@@ -3,34 +3,36 @@ using UnityEngine;
 
 public class Undertaker : Agent
 {
-    private StateMachine<Undertaker> stateMachine;
+    private StateMachine<Agent> stateMachine;
     public Agent body;
 
     public void Awake()
     {
-        this.stateMachine = new StateMachine<Undertaker>();
+        this.stateMachine = new StateMachine<Agent>();
         this.stateMachine.Init(this, UndertakingState.Instance);
+        controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         Bandit.OnBanditDeath += FindBody;
     }
 
     override public void FixedUpdate()
     {
-        GameController controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        if (!controller.characterMovement)
+        bool movement = doMovement();
+        if (body)
+        {
+            body.transform.position = this.transform.position;
+        }
+        if (!movement)
             return;
 
-        Vector2 mapLoc = getPosition();
-        this.transform.position = new Vector3(mapLoc.x, mapLoc.y, 0);
-
         this.stateMachine.Update();
-
-
     }
 
     void FindBody(eLocation location)
     {
         body = GameObject.Find("Keith").GetComponent<Bandit>();
-        this.location = body.location;
+        this.destination = body.location;
+        if (this.destination == eLocation.Bank)
+            this.location = eLocation.Bank;
     }
 
     public void BuryBody()
@@ -40,8 +42,9 @@ public class Undertaker : Agent
             body.dead = false;
             body.transform.Rotate(new Vector3(0.0f, 0.0f, 1.0f), -90.0f);
             body.GetComponent<SpriteRenderer>().color = Color.white;
+            body.GetComponent<SpriteRenderer>().flipX = false;
             Debug.Log("The Bandit lives again!");
-            this.location = eLocation.Undertakers;
+            this.destination = eLocation.Undertakers;
             body = null;
         }
     }

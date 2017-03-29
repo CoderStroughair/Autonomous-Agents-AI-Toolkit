@@ -19,23 +19,24 @@ class PatrolState : State<Sheriff>
 
     public override void Enter(Sheriff agent)
     {
-        agent.location = eLocation.SheriffsOffice;
+        if (agent.destination == eLocation.UNSET)
+            agent.location = eLocation.SheriffsOffice;
+        agent.destination = eLocation.SheriffsOffice;
     }
 
     public override void Execute(Sheriff agent)
     {
+        float random = UnityEngine.Random.Range(0.0f, 1.0f);
+        if (random > 0.6)
+            return;
         if (agent.location == eLocation.SheriffsOffice)
-            agent.location = eLocation.Undertakers;
-        else if (agent.location == eLocation.Undertakers)
-            agent.location = eLocation.Cemetery;
+            agent.destination = eLocation.Cemetery;
         else if (agent.location == eLocation.Cemetery)
-            agent.location = eLocation.Shack;
+            agent.destination = eLocation.Shack;
         else if (agent.location == eLocation.Shack)
-            agent.location = eLocation.Bank;
-        else if (agent.location == eLocation.Bank)
-            agent.location = eLocation.Mine;
-        else if (agent.location == eLocation.Mine)
-            agent.location = eLocation.SheriffsOffice;
+            agent.destination = eLocation.Mine;
+        else
+            agent.destination = eLocation.SheriffsOffice;
     }
 
     public override void Exit(Sheriff agent)

@@ -1,4 +1,8 @@
-﻿public class StateMachine <T> {
+﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+
+public class StateMachine <T> {
 	
 	private T agent;
 	private State<T> state;

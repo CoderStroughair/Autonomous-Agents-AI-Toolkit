@@ -14,7 +14,9 @@ public sealed class BankingState : State<Miner> {
 	private BankingState () {}
 
 	public override void Enter (Miner agent) {
-        agent.location = eLocation.Bank;
+        if (agent.destination == eLocation.UNSET)
+            agent.location = eLocation.Bank;
+        agent.destination = eLocation.Bank;
 		Debug.Log("Bob is entering the Bank...");
 	}
 

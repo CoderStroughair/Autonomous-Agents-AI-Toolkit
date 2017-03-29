@@ -14,7 +14,9 @@ public sealed class MineState : State<Miner> {
 	private MineState () {}
 	
 	public override void Enter (Miner agent) {
-        agent.location = eLocation.Mine;
+        if (agent.destination == eLocation.UNSET)
+            agent.location = eLocation.Mine;
+        agent.destination = eLocation.Mine;
 		Debug.Log("Bob is mining...");
 	}
 	

@@ -20,18 +20,16 @@ public class Bandit : Agent
         this.stateMachine = new StateMachine<Bandit>();
         this.stateMachine.Init(this, CampState.Instance);
         this.location = eLocation.OutlawCamp;
+        controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         Sheriff.OnArrival += RespondToArrival;
     }
 
     public override void FixedUpdate()
     {
-        GameController controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        if (!controller.characterMovement||dead)
+        if (!doMovement())
             return;
 
         this.stateMachine.Update();
-        Vector2 mapLoc = getPosition();
-        this.transform.position = new Vector3(mapLoc.x, mapLoc.y, 0);
     }
 
 
@@ -76,13 +74,9 @@ public class Bandit : Agent
             Debug.Log("There was no money in the bank for Keith to steal. He is sad now.");
     }
 
-    public void RespondToArrival(eLocation sheriffLocation)
+    public void RespondToArrival(Vector3 sheriffLocation)
     {
-        eLocation adjustedLocation = sheriffLocation;
-        //Adjust code so that the Sheriff knows if the Bandit is in town, from any building.
-        if (adjustedLocation == eLocation.SheriffsOffice || adjustedLocation == eLocation.Undertakers)
-            adjustedLocation = eLocation.Bank;
-        if (this.location == adjustedLocation && !dead)
+        if (this.transform.position == sheriffLocation && !dead)
         {
             Debug.Log("The Sheriff has found the Bandit!");
             float survive = Random.Range(0.0f, 1.0f);
@@ -96,6 +90,7 @@ public class Bandit : Agent
                 this.dead = true;
                 this.transform.Rotate(new Vector3(0.0f, 0.0f, 1.0f), 90.0f);
                 this.GetComponent<SpriteRenderer>().color = Color.gray;
+                this.GetComponent<SpriteRenderer>().flipX = true;
                 if (totalGold > 0)
                 {
                     Debug.Log("The Sheriff managed to recover some of the stolen gold!");

@@ -13,8 +13,11 @@ public sealed class CampState : State<Bandit> {
 	static CampState() {}
 	private CampState() {}
 	
-	public override void Enter (Bandit agent) {
-        agent.location = eLocation.OutlawCamp;
+	public override void Enter (Bandit agent)
+    {
+        if (agent.destination == eLocation.UNSET)
+            agent.location = eLocation.OutlawCamp;
+        agent.destination = eLocation.OutlawCamp;
         Debug.Log("Keith arrived at the Outlaw Camp...");
 	}
 	

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public sealed class UndertakingState : State<Undertaker>
+public sealed class UndertakingState : State<Agent>
 {
     static readonly UndertakingState instance = new UndertakingState();
 
@@ -14,25 +14,33 @@ public sealed class UndertakingState : State<Undertaker>
     static UndertakingState() { }
     private UndertakingState() { }
 
-    public override void Enter(Undertaker agent)
+    public override void Enter(Agent agent)
     {
-        agent.location = eLocation.Undertakers;
+        if (agent.destination == eLocation.UNSET)
+            agent.location = eLocation.Undertakers;
+        agent.destination = eLocation.Undertakers;
         Debug.Log("The Undertaker has begun work.");
     }
 
-    public override void Execute(Undertaker agent)
+    public override void Execute(Agent agent )
     {
-        if(agent.body != null)
+        Undertaker uAgent = agent as Undertaker;
+        if(uAgent.body != null)
         {
-            Debug.Log("The Undertaker is bringing the body to the Cemetary");
-            agent.location = eLocation.Cemetery;
-            agent.body.location = eLocation.Cemetery;
-
-            agent.BuryBody();
+            if (uAgent.destination != eLocation.Cemetery)
+            {
+                Debug.Log("The Undertaker is bringing the body to the Cemetary");
+                uAgent.destination = eLocation.Cemetery;
+                uAgent.body.destination = eLocation.Cemetery;
+            }
+            uAgent.body.transform.position = uAgent.transform.position;
+            uAgent.body.location = uAgent.location;
+            if (uAgent.location == eLocation.Cemetery)
+                uAgent.BuryBody();
         }
     }
 
-    public override void Exit(Undertaker agent)
+    public override void Exit(Agent agent)
     {
     }
 }

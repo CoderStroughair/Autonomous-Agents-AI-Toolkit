@@ -6,10 +6,9 @@ class Sheriff : Agent
 {
     private StateMachine<Sheriff> stateMachine;
 
-    public delegate void Showdown(eLocation sheriffLocation);
+    public delegate void Showdown(Vector3 location);
     public static event Showdown OnArrival;
 
-    private bool first = true;
 
     public void Awake()
     {
@@ -20,20 +19,14 @@ class Sheriff : Agent
 
     override public void FixedUpdate()
     {
-        if (!controller.characterMovement)
+        bool movement = doMovement();
+        OnArrival(this.transform.position);
+        if (!movement)
             return;
 
         this.stateMachine.Update();
-        Vector2 mapLoc = getPosition();
-        this.transform.position = new Vector3(mapLoc.x, mapLoc.y, 0);
 
-        if (first)
-        {
-            controller.pathfinder.solve(GetMapPosition(), new Vector2(0, 0));
-            first = false;
-        }
-        else
-            OnArrival(this.location);
+
 
     }
 }

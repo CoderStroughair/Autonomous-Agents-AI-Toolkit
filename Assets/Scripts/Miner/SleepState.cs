@@ -18,7 +18,9 @@ public sealed class SleepState : State<Miner>
 
     public override void Enter(Miner agent)
     {
-        agent.location = eLocation.Shack;
+        if (agent.destination == eLocation.UNSET)
+            agent.location = eLocation.Shack;
+        agent.destination = eLocation.Shack;
         Debug.Log("Bob has headed home to bed.");
     }
 

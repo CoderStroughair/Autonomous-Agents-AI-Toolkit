@@ -15,7 +15,9 @@ public sealed class RobState : GlobalState<Bandit> {
 
     public override void Enter(Bandit agent)
     {
-        agent.location = eLocation.Bank;
+        if (agent.destination == eLocation.UNSET)
+            agent.location = eLocation.Bank;
+        agent.destination = eLocation.Bank;
         Debug.Log("Keith has arrived at the Bank...");
     }
 
