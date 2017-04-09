@@ -31,8 +31,9 @@ public sealed class CemeteryState : State<Bandit> {
             agent.resetMaxTurns();
             agent.ChangeState(CampState.Instance);
         }
-        else if (Random.Range(0, 4) == 1)
+        else if (Random.Range(0, 4) == 1 || agent.shouldRob)
         {
+            agent.shouldRob = false;
             agent.EnterGlobalState(RobState.Instance);
         }
 

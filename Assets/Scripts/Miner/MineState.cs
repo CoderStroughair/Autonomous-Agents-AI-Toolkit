@@ -21,13 +21,15 @@ public sealed class MineState : State<Miner> {
 	}
 	
 	public override void Execute (Miner agent) {
-		agent.CreateTime();
-		Debug.Log("Mining Gold. Total Mined: " + Miner.totalGold + " unit" + (Miner.totalGold > 1 ? "s" : "") + "...");
+		agent.Mine();
+		//Debug.Log("Mining Gold. Total Mined: " + Miner.totalGold + " unit" + (Miner.totalGold > 1 ? "s" : "") + "...");
         if (Miner.totalGold > 7)
             agent.ChangeState(BankingState.Instance);
 	}
 	
 	public override void Exit (Miner agent) {
 		Debug.Log("...Enough mining for one day!");
+        int stench = Random.Range(1, 3);
+        Agent.TriggerSmellEvent(agent, stench);
 	}
 }

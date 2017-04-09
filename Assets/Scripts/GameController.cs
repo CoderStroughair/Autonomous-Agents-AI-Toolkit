@@ -15,7 +15,6 @@ public class GameController : MonoBehaviour {
 	public Vector2 CurrentPosition;
 
     public TileSprite[,] _map;
-    private GameObject controller;
     private GameObject _tileContainer;
     public Solver pathfinder;
 	private List<GameObject> _tiles = new List<GameObject>();
@@ -130,7 +129,6 @@ public class GameController : MonoBehaviour {
 
     public void Start()
     {
-        controller = GameObject.Find("Controller");
         _map = new TileSprite[(int)MapSize.x, (int)MapSize.y];
         DefaultTiles();
         SetTiles();
@@ -138,18 +136,68 @@ public class GameController : MonoBehaviour {
         pathfinder = new Solver(_map);
     }
 
-
     private void Update()
     {
+        characterMovement = false;
         if (framesPassed == 0)
             characterMovement = true;
-        else
-            characterMovement = false;
+
         framesPassed ++;
-        if (framesPassed > 50)
+        if (framesPassed > 40)
             framesPassed = 0;
 
         AddTilesToMap();
     }
 
+    //Direction is the direction in which the agent is looking. If its set to 0, it means that the agent can see in all directions. 
+    public List<Agent> AgentSee(Agent a, int maxDistance, Vector3 direction, ref List<Vector2> locations)
+    {
+        List<Agent> agentsOut = new List<Agent>();
+        GameObject[] agents = GameObject.FindGameObjectsWithTag("Agent");
+        Vector2 agentLocation = a.GetGridPosition();
+        foreach (GameObject agent in agents)
+        {
+            Agent target = agent.GetComponent<Agent>();
+            if (target == a)
+                continue;
+            Vector2 targetLocation = target.GetGridPosition();
+            if(direction == new Vector3(0.0f, 0.0f, 0.0f))
+            {
+                if(Vector2.Distance(agentLocation, targetLocation) <= maxDistance)
+                {
+                    locations.Add(targetLocation);
+                    agentsOut.Add(target);
+                }
+            }
+            else
+            {
+                Vector3 distance = targetLocation - agentLocation;
+                distance = Vector3.ClampMagnitude(distance, 1.0f);
+                direction = Vector3.ClampMagnitude(direction, 1.0f);
+                if((Vector2.Distance(agentLocation, targetLocation) <= maxDistance) && distance == direction)
+                {
+                    locations.Add(targetLocation);
+                    agentsOut.Add(target);
+                }
+            }
+        }
+        return agentsOut;
+    }
+
+    public List<Agent> AgentHear(Agent a, int maxDistance, ref List<Vector2> locations)
+    {
+        List<Agent> agentsOut = new List<Agent>();
+        GameObject[] agents = GameObject.FindGameObjectsWithTag("Agent");
+        Vector2 agentLocation = a.GetGridPosition();
+        foreach(GameObject agent in agents)
+        {
+            Agent target = agent.GetComponent<Agent>();
+            if (target == a)
+                continue;
+            Vector2 targetLocation = target.GetGridPosition();
+            if(pathfinder.getPathLength(agentLocation, targetLocation) < maxDistance)
+                agentsOut.Add(target);
+        }
+        return agentsOut;
+    }
 }

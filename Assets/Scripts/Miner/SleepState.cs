@@ -22,6 +22,8 @@ public sealed class SleepState : State<Miner>
             agent.location = eLocation.Shack;
         agent.destination = eLocation.Shack;
         Debug.Log("Bob has headed home to bed.");
+        agent.IncreaseGoldBuffer();
+        timeslept = 0;
     }
 
     public override void Execute(Miner agent)

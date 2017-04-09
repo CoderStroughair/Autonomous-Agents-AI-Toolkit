@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -8,21 +7,19 @@ public class Solver
     private Node[,] map;
     private TileSprite[,] tileMap;
     private Node end;
+    private int width, height;
 
     public Solver(TileSprite[,] tileMap)
     {
         this.tileMap = tileMap;
-        int width = tileMap.GetLength(0);
-        int height = tileMap.GetLength(1);
-        //Debug.Log(width + "," + height);
+        width = tileMap.GetLength(0);
+        height = tileMap.GetLength(1);
     }
 
     public Stack<Node> solve(Vector2 startLocation, Vector2 endLocation)
     {
         //Debug.Log(startLocation + " to " + endLocation);
         end = new Node(endLocation, eTile.Unset, endLocation);
-        int width = tileMap.GetLength(0);
-        int height = tileMap.GetLength(1);
         this.map = new Node[width, height];
         for (int x = 0; x < width; x++)
         {
@@ -100,7 +97,7 @@ public class Solver
             // Already-open nodes are only added to the list if their G-value is lower going via this route.
             if (curr.state == NodeState.Open)
             {
-                float traversalCost = Node.GetTraversalCost(curr.location, curr.parent.location);
+                float traversalCost = Node.GetWeightedTraversalCost(curr.location, curr.tileType, curr.parent.location);
                 float gTemp = fromNode.G + traversalCost;
                 if (gTemp < curr.G)
                 {
@@ -139,5 +136,21 @@ public class Solver
             if (result[i].x >= map.GetLength(0) || result[i].y >= map.GetLength(1))
                 result.RemoveAt(i);
         return result;
+    }
+
+    //this is gonna be used in tandem with my Sound Sensing
+    public float getPathLength(Vector2 startLocation, Vector2 endLocation)
+    {
+        if (startLocation == endLocation)
+            return 0;
+        float length = -1;
+
+        Stack<Node> path = solve(startLocation, endLocation);
+
+        Node[] nodes = path.Reverse().ToArray<Node>();
+
+        length = nodes[0].G;
+
+        return length;
     }
 }

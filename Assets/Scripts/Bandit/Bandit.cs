@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Bandit : Agent
@@ -10,6 +10,7 @@ public class Bandit : Agent
     int MAX_TURNS_LURKING = 5;
     public delegate void BankRobbery(int i);
     public static event BankRobbery OnBankBalanceChange;
+    public bool shouldRob = false;
 
     public delegate void BanditDeath(eLocation location);
     public static event BanditDeath OnBanditDeath;
@@ -22,13 +23,23 @@ public class Bandit : Agent
         this.location = eLocation.OutlawCamp;
         controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         Sheriff.OnArrival += RespondToArrival;
+        Miner.OnSmell += RespondToMinersSmell;
     }
 
     public override void FixedUpdate()
     {
         if (!doMovement())
             return;
-
+        List<Vector2> a = new List<Vector2>();
+        List<Agent> g = controller.AgentHear(this, 2, ref a);
+        foreach (Agent agent in g)
+        {
+            if (agent.agentName == "Sheriff")
+            {
+                Debug.Log("The Bandit knows the Sheriff is around somewhere, better get moving!");
+                turnsLurking = MAX_TURNS_LURKING;
+            }
+        }
         this.stateMachine.Update();
     }
 
@@ -99,6 +110,15 @@ public class Bandit : Agent
                 if(OnBanditDeath != null)
                     OnBanditDeath(location);
             }
+        }
+    }
+
+    protected void RespondToMinersSmell(Vector2 gridLocation, int radius)
+    {
+        if (Vector2.Distance(GetGridPosition(), gridLocation) <= radius)
+        {
+            Debug.Log("The Bandit can smell the money coming off the Miner.");
+            shouldRob = true;
         }
     }
 }

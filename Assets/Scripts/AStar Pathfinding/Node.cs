@@ -18,12 +18,12 @@ public class Node
         set
         {
             this.parentNode = value;
-            this.G = this.parentNode.G + GetTraversalCost(this.location, this.parentNode.location);
+            this.G = this.parentNode.G + GetWeightedTraversalCost(this.parentNode.location, this.parentNode.tileType, this.location);
         }
     }
     public Vector2 location;
     public NodeState state = NodeState.Untested;
-    private eTile tileType;
+    public eTile tileType;
     public float G;     //Cost to get from the current location to this one
     public float H;     //Cost to get from this node to the final destination
     public float F
@@ -37,14 +37,14 @@ public class Node
         tileType = type;
         this.location = location;
         this.state = NodeState.Untested;
-        this.H = GetTraversalCost(this.location, endLocation);
+        this.H = GetWeightedTraversalCost(this.location, this.tileType, endLocation);
         this.G = 0;
     }
 
     public void resetNode(Vector2 endLocation)
     {
         this.state = NodeState.Untested;
-        this.H = GetTraversalCost(this.location, endLocation);
+        this.H = GetWeightedTraversalCost(this.location, this.tileType, endLocation);
         this.G = 0;
     }
 
@@ -52,6 +52,31 @@ public class Node
     {
         float deltaX = otherLocation.x - location.x;
         float deltaY = otherLocation.y - location.y;
+        return (float)Mathf.Sqrt(deltaX * deltaX + deltaY * deltaY);
+    }
+
+    internal static float GetWeightedTraversalCost(Vector2 location, eTile tileType, Vector2 otherLocation)
+    {
+        float terrainMod;
+        switch(tileType)
+        {
+            case eTile.Mountain:
+                terrainMod = 1.5f;
+                break;
+            case eTile.Town:
+            case eTile.Cemetary:
+            case eTile.Mine:
+            case eTile.Encampment:
+            case eTile.Shack:
+                terrainMod = 1.2f;
+                break;
+            case eTile.Plains:
+            default:
+                terrainMod = 1;
+                break;
+        }
+        float deltaX = (otherLocation.x - location.x) * terrainMod;
+        float deltaY = (otherLocation.y - location.y) * terrainMod;
         return (float)Mathf.Sqrt(deltaX * deltaX + deltaY * deltaY);
     }
 }

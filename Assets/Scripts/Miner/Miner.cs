@@ -4,7 +4,7 @@ public class Miner : Agent {
 
 	private StateMachine<Miner> stateMachine;
 
-	public static int WAIT_TIME = 20;
+	public static int GOLD_GOAL = 20;
 	public static int bankedCash = 0;
 	public static int totalGold = 0;
 
@@ -16,22 +16,21 @@ public class Miner : Agent {
         controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
     }
 
+    public void IncreaseGoldBuffer()
+    {
+        GOLD_GOAL += 20;
+    }
 	public void IncreaseBankedCash (int amount)
     {
         Miner.bankedCash += amount;
 	}
 
-	public bool WaitedLongEnough ()
-    {
-		return Miner.bankedCash >= WAIT_TIME;
-	}
-
     public bool StoredEnough ()
     {
-        return Miner.bankedCash >= WAIT_TIME;
+        return Miner.bankedCash >= GOLD_GOAL;
     }
 
-	public void CreateTime ()
+	public void Mine ()
     {
         Miner.totalGold++;
 	}

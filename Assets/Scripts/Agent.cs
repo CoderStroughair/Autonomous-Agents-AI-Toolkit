@@ -11,10 +11,15 @@ abstract public class Agent : MonoBehaviour {
     protected GameController controller;
     public Stack<Node> path = new Stack<Node>();
     private bool first = true;
+    public string agentName = "Unset";
+
+    public delegate void Smell(Vector2 gridLocation, int radius);
+    public static event Smell OnSmell;
 
     abstract public void FixedUpdate();
 
-    public bool doMovement()    //will return true only if the character reaches their destination, or isn't moving
+    //will return true only if the character reaches their destination, or isn't moving
+    public bool doMovement()
     {
         if (first)
         {
@@ -132,5 +137,26 @@ abstract public class Agent : MonoBehaviour {
         }
 
         return new Vector2(-1, -1);
+    }
+
+    public Vector2 GetGridPosition()
+    {
+
+        Vector2 MapSize = controller.MapSize;
+        var viewOffsetX = MapSize.x / 2f;
+        var viewOffsetY = MapSize.y / 2f;
+
+        float tX = this.transform.position.x;
+        float tY = this.transform.position.y;
+
+        int i = (int)(tX - 0.5f + viewOffsetX);
+        int j = (int)(tY - 0.5f + viewOffsetY);
+
+        return new Vector2(i, j);
+    }
+
+    public static void TriggerSmellEvent(Agent agent, int radius)
+    {
+        OnSmell(agent.GetGridPosition(), radius);
     }
 }
