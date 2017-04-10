@@ -37,7 +37,7 @@ public class Node
         tileType = type;
         this.location = location;
         this.state = NodeState.Untested;
-        this.H = GetWeightedTraversalCost(this.location, this.tileType, endLocation);
+        this.H = GetTraversalCost(this.location, endLocation);
         this.G = 0;
     }
 

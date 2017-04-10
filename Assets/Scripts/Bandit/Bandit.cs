@@ -98,6 +98,7 @@ public class Bandit : Agent
             else
             {
                 Debug.Log("The Bandit was killed!");
+                this.path.Clear();
                 this.dead = true;
                 this.transform.Rotate(new Vector3(0.0f, 0.0f, 1.0f), 90.0f);
                 this.GetComponent<SpriteRenderer>().color = Color.gray;

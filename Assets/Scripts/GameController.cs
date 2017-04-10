@@ -20,7 +20,6 @@ public class GameController : MonoBehaviour {
 	private List<GameObject> _tiles = new List<GameObject>();
     public bool characterMovement = true;
     private int framesPassed = 0;
-    private bool first = true;
 
 	//create a map of size MapSize of unset tiles
 	private void DefaultTiles()
@@ -113,10 +112,6 @@ public class GameController : MonoBehaviour {
                 if (_map[(int)x, (int)y].shaded)
                 {
                     renderer.color = Color.gray;
-                    if (first)
-                    {
-                        Debug.Log("hi");
-                    }
                 }
                 else
                     renderer.color = Color.white;
@@ -124,7 +119,6 @@ public class GameController : MonoBehaviour {
                 _tiles.Add(t);
             }
         }
-        first = false;
     }
 
     public void Start()
@@ -136,7 +130,7 @@ public class GameController : MonoBehaviour {
         pathfinder = new Solver(_map);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         characterMovement = false;
         if (framesPassed == 0)
